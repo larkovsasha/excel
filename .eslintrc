@@ -1,0 +1,20 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "google"
+    ],
+    "parserOptions": {
+        "sourceType": "module",
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "arrow-parens": "off",
+    },
+
+}
