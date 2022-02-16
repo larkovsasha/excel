@@ -19,6 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-width: $info-cell-width;
     width: $info-cell-width;
     height: 100%;
     border: 1px solid $on-hovered;
