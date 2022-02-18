@@ -62,6 +62,45 @@ class Dom {
         console.log(callback);
         this.$el.removeEventListener(event, callback);
     }
+    /**
+     * return closest element parent with selector,
+     * which are wrapped by Dom class
+     * @param {string} selector
+     * @return {Dom}
+     */
+    closest(selector) {
+        return $(this.$el.closest(selector));
+    }
+    /**
+     * @return {Object} coordinates of element
+     */
+    getCoords() {
+        return this.$el.getBoundingClientRect();
+    }
+
+    /**
+     * @param {string} selector
+     * @return {NodeList}
+     */
+    findAll(selector) {
+        return this.$el.querySelectorAll(selector);
+    }
+
+    /**
+     * @param {Object} styles styles to apply
+     */
+    css(styles) {
+        Object.keys(styles).forEach(key => {
+            this.$el.style[key] = styles[key];
+        });
+    }
+
+    /**
+     * @return {Object}
+     */
+    get dataSet() {
+        return this.$el.dataset;
+    }
 }
 
 /**
