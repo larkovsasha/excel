@@ -81,21 +81,25 @@
 
 
   .cell {
-    display: flex;
-    align-items: center;
     width: $cell-width;
     min-width: 40px;
     padding: 3px;
     border: 1px solid $on-hovered;
     border-left: none;
     border-top: none;
-    white-space: nowrap;
+    white-space: pre-wrap;
     outline: none;
+    overflow-x: auto;
+    &::-webkit-scrollbar { width: 0; height: 0}
     &.selected {
       border: none;
       outline: 2px  solid $cell-selected;
-
-      /*outline: 2px  solid $cell-selected;*/
+      z-index: 10;
+    }
+    &.selected-background {
+      z-index: 11;
+      margin: 0;
+      background: rgba($cell-selected, .1);
     }
   }
 }

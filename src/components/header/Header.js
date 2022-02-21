@@ -8,6 +8,16 @@ export class Header extends ExcelComponent {
     static get className() {
         return 'excel__header';
     }
+    /**
+     * @param {Dom} $root className
+     * @param {Object} options
+     */
+    constructor($root, options) {
+        super($root, {
+            name: 'Header',
+            ...options,
+        });
+    }
 
     /**
      * @return {string} return html string

@@ -6,13 +6,23 @@ const CODES = {
 
 /**
  * create cell
- * @param {string} _ not needed argument
- * @param{number} index
- * @return{string}cell HTML string
+ * @param {number} row not needed argument
+ * @return{Function}
  */
-function createCell(_, index) {
-    return `
-        <div class="cell" contenteditable data-col="${index}"></div>
+function createCell(row) {
+    /**
+     * create cell
+     * @param {string} _ not needed argument
+     * @param{number} index
+     * @return{string}cell HTML string
+     */
+    return (_, index) => `
+        <div 
+            class="cell" contenteditable 
+            data-col="${index}"
+            data-type="cell"
+            data-id="${row}:${index}"
+        ></div>
     `;
 }
 
@@ -69,11 +79,11 @@ export function createTable(rowsCount = 15) {
         .join('');
     rows.push(createRow(cols));
 
-    for (let i = 1; i < rowsCount + 1; i++) {
+    for (let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
         const row = createRow(new Array(colsCount)
             .fill('')
-            .map(createCell)
-            .join(''), i.toString());
+            .map(createCell(rowIndex))
+            .join(''), (rowIndex + 1).toString());
         rows.push(row);
     }
     return rows.join('');
