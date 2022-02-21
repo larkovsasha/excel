@@ -1,14 +1,17 @@
 import {ExcelComponent} from "@core/ExcelComponent";
+import {$} from "@core/dom";
 
 // eslint-disable-next-line require-jsdoc
 export class Formula extends ExcelComponent {
     /**
-     * @param {HTMLElement} $root
+     * @param {Dom} $root className
+     * @param {Object} options
      */
-    constructor($root) {
+    constructor($root, options) {
         super($root, {
             name: 'Formula',
-            listeners: ['click', 'input'],
+            listeners: ['input', 'keydown'],
+            ...options,
         });
     }
     /**
@@ -17,30 +20,47 @@ export class Formula extends ExcelComponent {
     static get className() {
         return 'excel__formula';
     }
-
+    /**
+     * init DomListeners and Selectors
+     */
+    init() {
+        super.init();
+        this.$input = this.$root.find('#formula-input');
+        this.$on('table:cellSelect', $cell => {
+            this.$input.text($cell.text());
+        });
+        this.$on('table:input', $cell => {
+            console.log($cell);
+            this.$input.text($cell.text());
+        });
+    }
     /**
      * @return {string} return html string
      */
     toHtml() {
         return `
         <div class="formula-info">fx</div>
-        <div class="formula-input" contenteditable spellcheck="false"></div>
+        <div id="formula-input"
+         class="formula-input" contenteditable spellcheck="false"></div>
         `;
     }
 
     /**
      * on formula input
-     * @param{event}event
+     * @param{Event}event
      */
     onInput(event) {
-        console.log("Formula: input", event);
+        this.emitter.emit('formula:input', $(event.target).text());
     }
-
     /**
-     * on formula click
-     * @param{event}event
+     * on press enter focus moves to cell
+     * @param{Event}event
      */
-    onClick(event) {
-        console.log("Formula: click", event);
+    onKeydown(event) {
+        const keys = ['Tab', 'Enter'];
+        if (keys.includes(event.key)) {
+            event.preventDefault();
+            this.emitter.emit('formula:done');
+        }
     }
 }

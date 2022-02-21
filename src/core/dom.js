@@ -59,7 +59,6 @@ class Dom {
      * @param {function} callback
      */
     off(event, callback) {
-        console.log(callback);
         this.$el.removeEventListener(event, callback);
     }
     /**
@@ -77,6 +76,13 @@ class Dom {
     getCoords() {
         return this.$el.getBoundingClientRect();
     }
+    /**
+     * @param {string} selector
+     * @return {Dom}
+     */
+    find(selector) {
+        return $(this.$el.querySelector(selector));
+    }
 
     /**
      * @param {string} selector
@@ -85,7 +91,20 @@ class Dom {
     findAll(selector) {
         return this.$el.querySelectorAll(selector);
     }
-
+    /**
+     * @param {string | undefined} text return or set text
+     * @return {string | Dom}
+     */
+    text(text) {
+        if (text) {
+            this.$el.textContent = text;
+            return this;
+        }
+        if (this.$el.tagName.toLowerCase() === 'input') {
+            return this.$el.value.trim();
+        }
+        return this.$el.textContent.trim();
+    }
     /**
      * @param {Object} styles styles to apply
      */
@@ -94,7 +113,52 @@ class Dom {
             this.$el.style[key] = styles[key];
         });
     }
-
+    /**
+     * @param {Object} styles update styles
+     */
+    updateCss(styles) {
+        Object.keys(styles).forEach(key => {
+            if (this.$el.style[key]) {
+                this.$el.style[key] += ',' + styles[key];
+            } else {
+                this.$el.style[key] = styles[key];
+            }
+        });
+    }
+    /**
+     * @return{Dom}
+     * focus on element
+     */
+    focus() {
+        this.$el.focus();
+        return this;
+    }
+    /**
+     * @param {string} className class to add
+     * @return{Dom}
+     */
+    addClass(className) {
+        this.$el.classList.add(className);
+        return this;
+    }
+    /**
+     * @param {string} className class to remove
+     * @return{Dom}
+     */
+    removeClass(className) {
+        this.$el.classList.remove(className);
+        return this;
+    }
+    /**
+     * @return{Object} cell id
+     */
+    id() {
+        const [row, column] = this.$el.dataset.id.split(':');
+        return {
+            row: +row,
+            col: +column,
+        };
+    }
     /**
      * @return {Object}
      */
@@ -106,7 +170,7 @@ class Dom {
 /**
  * function for simple work with DOM
  * @param {string | HTMLElement} el
- * @return {Object} Dom
+ * @return {Dom} Dom
  */
 export function $(el) {
     return new Dom(el);

@@ -8,6 +8,16 @@ export class Toolbar extends ExcelComponent {
     static get className() {
         return 'excel__toolbar';
     }
+    /**
+     * @param {Dom} $root className
+     * @param {Object} options
+     */
+    constructor($root, options) {
+        super($root, {
+            name: 'Toolbar',
+            ...options,
+        });
+    }
 
     /**
      * @return {string} return html string

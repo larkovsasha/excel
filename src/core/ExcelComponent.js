@@ -11,24 +11,44 @@ export class ExcelComponent extends DomListener {
     constructor($root, options = {}) {
         super($root, options.listeners);
         this.name = options.name || '';
+        this.emitter = options.emitter;
+        this.prepare();
+        this.unsubscribers = [];
     }
-    // /**
-    //  * @return {string} return html string
-    //  */
-    // toHtml() {
-    //     return '<div>component</div>';
-    // }
+    /**
+     * method for logic to be executed after getting an instance of class
+     * and before other methods
+     */
+    prepare() {
+    }
     /**
      * init event listeners
      */
     init() {
         this.initDOMListeners();
     }
-
+    /**
+     * @param{string}event
+     * @param{any}args
+     * notify subscriber
+     */
+    $emit(event, ...args) {
+        this.emitter.emit(event, ...args);
+    }
+    /**
+     * @param{string}event
+     * @param{Function}fn
+     * subscribe to event
+     */
+    $on(event, fn) {
+        const unsub = this.emitter.subscribe(event, fn);
+        this.unsubscribers.push(unsub);
+    }
     /**
      * remove event listeners
      */
     destroy() {
         this.removeDOMListeners();
+        this.unsubscribers.forEach(unsub => unsub());
     }
 }
