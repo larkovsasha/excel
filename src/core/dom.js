@@ -103,7 +103,10 @@ class Dom {
         if (this.$el.tagName.toLowerCase() === 'input') {
             return this.$el.value.trim();
         }
-        return this.$el.textContent.trim();
+        if (this.$el.textContent) {
+            return this.$el.textContent.trim();
+        }
+        return ' ';
     }
     /**
      * @param {Object} styles styles to apply

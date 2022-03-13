@@ -17,6 +17,7 @@ export class Excel {
         this.$el = $(selector);
         this.components = options.components || [];
         this.emmiter = new Emitter();
+        this.store = options.store;
     }
     /**
      * create root element and append components instances
@@ -27,6 +28,7 @@ export class Excel {
 
         const componentOptions = {
             emitter: this.emmiter,
+            store: this.store,
         };
         this.components = this.components.map(Component => {
             const $el = $.create('div', Component.className);

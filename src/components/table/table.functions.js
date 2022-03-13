@@ -10,6 +10,21 @@ export const isCell = (event) => {
 };
 
 /**
+ * @param {Dom} cell1
+ * @param {Dom} cell2
+ * @return {boolean}
+ *  returns whether the cells are the same
+ */
+export const cellsEqual = (cell1, cell2) => {
+    if (!cell1 || !cell2) {
+        return false;
+    }
+    const {row: row1, col: col1} = cell1.id();
+    const {row: row2, col: col2} = cell2.id();
+    return row1 === row2 && col1 === col2;
+};
+
+/**
  * @param {Dom} current
  * @param {Dom} target
  * @return {Object} cell array and coordinates for cell group

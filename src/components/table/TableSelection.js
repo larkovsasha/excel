@@ -8,6 +8,7 @@ export class TableSelection {
     constructor() {
         this.group = [];
         this.current = null;
+        this.groupEdgeCell = null;
     }
     /**
      * @param {Dom} $el dom selector
@@ -34,9 +35,12 @@ export class TableSelection {
     /**
      * @param{Dom[]}$group
      * @param{Object}coordinates coordinates of cells group
+     * @param{Dom}groupEdgeCell the cell in which the cursor is
+     * located when scaling the selected area
      * set cells group
      */
-    selectGroup($group = [], coordinates) {
+    selectGroup($group = [], coordinates, groupEdgeCell) {
+        this.groupEdgeCell = groupEdgeCell;
         this.groupCoords = coordinates;
         this.clear();
         this.current.addClass(selectedClassName).focus();

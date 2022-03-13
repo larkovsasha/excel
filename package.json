@@ -1,5 +1,5 @@
 {
-  "name": "exel",
+  "name": "excel",
   "version": "1.0.0",
   "description": "",
   "main": "webpack.config.js",
@@ -14,7 +14,7 @@
   },
   "keywords": [
     "js",
-    "exel"
+    "excel"
   ],
   "author": "Larkov Aleksandr <LarkovAleksandr005@yandex.ru>",
   "license": "ISC",
