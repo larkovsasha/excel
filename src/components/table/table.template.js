@@ -1,4 +1,7 @@
 // codes of start and end letter that are used in table
+import {toInlineStyles} from "@core/utils";
+import {defaultFormulaStyles} from "@/constants";
+
 const CODES = {
     A: 65,
     Z: 90,
@@ -21,17 +24,25 @@ function createCell(row, state) {
      */
     const colState = state.colState;
     const dataState = state.dataState;
+
+    // const styles = Object.keys(defaultFormulaStyles)
+    //     .map(key => `${camelToDashed(key)}: ${defaultFormulaStyles[key]}`)
+    //     .join(';');
     return (_, index) => {
         const id = `${row}:${index}`;
         const width = (colState[index] || DEFAULT_WIDTH) + 'px';
         const value = dataState[id] ? dataState[id] : '';
+        const styles = toInlineStyles({
+            ...defaultFormulaStyles,
+            ...state.stylesState[id],
+        });
         return `
         <div 
             class="cell" contenteditable 
             data-col="${index}"
             data-type="cell"
             data-id="${id}"
-            style="width: ${width}"
+            style="${styles}; width: ${width}"
         >${value}</div>
     `;
     };
@@ -64,7 +75,7 @@ function createCol(content, index, colState) {
  * @param{string} number count of row
  * @return{string}row HTML string
  */
-function createRow(cells, rowState= {}, number = '') {
+function createRow(cells, rowState = {}, number = '') {
     const resize = number ?
         '<div class="row-resize" data-resize="row"></div>' :
         '';

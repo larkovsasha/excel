@@ -1,4 +1,7 @@
-import {CHANGE_TEXT, COL_RESIZE, ROW_RESIZE} from "@/reducers/types";
+import {
+    CHANGE_TEXT, COL_RESIZE,
+    CHANGE_STYLES, ROW_RESIZE, APPLY_STYLES, CHANGE_TITLE,
+} from "@/reducers/types";
 
 /**
  * main  reducer for store
@@ -7,7 +10,10 @@ import {CHANGE_TEXT, COL_RESIZE, ROW_RESIZE} from "@/reducers/types";
  * @return {Object}
  */
 export function rootReducer(state, action) {
+    let stylesState;
     switch (action.type) {
+    case '__INIT__':
+        return {...state, currentStyles: {}};
     case COL_RESIZE:
         state.colState[action.id] = action.value;
         return {...state};
@@ -16,8 +22,24 @@ export function rootReducer(state, action) {
         return {...state};
     case CHANGE_TEXT:
         state.dataState[action.data.id] = action.data.value;
-        console.log(state);
         return {...state, currentText: action.data.value};
+    case CHANGE_STYLES:
+        return {...state, currentStyles: action.data};
+    case APPLY_STYLES:
+        stylesState = state.stylesState || {};
+        action.data.ids.forEach(({row, col}) => {
+            const stringId = `${row}:${col}`;
+            stylesState[stringId] = {
+                ...stylesState[stringId],
+                ...action.data.value,
+            };
+        });
+        return {
+            ...state,
+            stylesState: {...stylesState},
+        };
+    case CHANGE_TITLE:
+        return {...state, title: action.data};
     default: return state;
     }
 }

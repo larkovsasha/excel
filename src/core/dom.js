@@ -129,6 +129,16 @@ class Dom {
         });
     }
     /**
+     * @param {Array} styles array of css attribute
+     * @return {Object}
+     */
+    getStyles(styles) {
+        return styles.reduce((res, s) => {
+            res[s] = this.$el.style[s];
+            return res;
+        }, {});
+    }
+    /**
      * @return{Dom}
      * focus on element
      */
@@ -161,6 +171,19 @@ class Dom {
             row: +row,
             col: +column,
         };
+    }
+    /**
+     * set or get data attribute
+     * @param{string}name
+     * @param{string}value
+     * @return{Dom | string} cell id
+     */
+    attr(name, value) {
+        if (!value) {
+            return this.$el.getAttribute(name);
+        }
+        this.$el.setAttribute(name, value);
+        return this;
     }
     /**
      * @return {Object}

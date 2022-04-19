@@ -1,4 +1,7 @@
 import {ExcelComponent} from "@core/ExcelComponent";
+import {$} from "@core/dom";
+import {Actions} from "@/reducers/actions";
+import {defaultTitle} from "@/constants";
 
 // eslint-disable-next-line require-jsdoc
 export class Header extends ExcelComponent {
@@ -15,6 +18,7 @@ export class Header extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Header',
+            listeners: ['input'],
             ...options,
         });
     }
@@ -23,8 +27,9 @@ export class Header extends ExcelComponent {
      * @return {string} return html string
      */
     toHtml() {
+        const title = this.store.getState().title || defaultTitle;
         return `
-        <input type="text" class="input" value="Новая таблица">
+        <input type="text" class="input" value="${title}">
 
         <div class="btns-box">
             <div class="btn">
@@ -36,5 +41,10 @@ export class Header extends ExcelComponent {
             </div>
         </div>
         `;
+    }
+    // eslint-disable-next-line
+    onInput(event) {
+        const $target = $(event.target);
+        this.$dispatch(Actions.changeTitle($target.text()));
     }
 }

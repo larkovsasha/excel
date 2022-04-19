@@ -44,7 +44,6 @@ const createCellsGroup = ($root, selection, target) => {
     const current = selection.current;
     target = $(target);
     const {ids, coords} = createIds(current, target);
-
     const cells = ids.map(id => $root.find(`[data-id="${id}"]`));
     selection.selectGroup(cells, coords, target);
 };

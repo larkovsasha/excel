@@ -6,6 +6,7 @@ import {selectCellsHandler} from "@/components/table/eventHandlers/selectCells";
 import {isCell, nextSelector} from "@/components/table/table.functions";
 import {$} from "@core/dom";
 import {Actions} from "@/reducers/actions";
+import {defaultFormulaStyles} from "@/constants";
 
 // eslint-disable-next-line require-jsdoc
 export class Table extends ExcelComponent {
@@ -59,6 +60,16 @@ export class Table extends ExcelComponent {
         this.$on('formula:done', text => {
             this.selection.current.focus();
         });
+
+        this.$on('toolbar:ApplyStyles', value => {
+            this.selection.applyStyles(value);
+            console.log(value);
+            this.$dispatch(Actions.applyStyles({
+                value,
+                ids: this.selection.selectedIds,
+            }));
+            this.$dispatch(Actions.changeCurrentCellStyles(value));
+        });
     }
 
     /**
@@ -70,6 +81,8 @@ export class Table extends ExcelComponent {
         this.$emit('table:cellSelect', $cell);
         this.$dispatch({type: 'select'});
         this.changeText($cell.text());
+        const styles = $cell.getStyles(Object.keys(defaultFormulaStyles ));
+        this.$dispatch(Actions.changeCurrentCellStyles(styles));
     }
 
 
@@ -80,8 +93,15 @@ export class Table extends ExcelComponent {
     handleSelectCellGroup(event) {
         if (isCell(event)) {
             const $cell = $(event.target);
-            this.$dispatch({type: 'select'});
             this.$emit('table:cellSelect', $cell);
+            this.$dispatch({type: 'select'});
+
+            const styles = $cell.getStyles(Object.keys(defaultFormulaStyles ));
+            this.$dispatch(Actions.changeCurrentCellStyles(styles));
+            // this.selectCell($cell);
+            // !!!!
+            // this.$dispatch({type: 'select'});
+            // this.$emit('table:cellSelect', $cell);
             selectCellsHandler(this.$root, event, this.selection);
         }
     }
@@ -104,7 +124,6 @@ export class Table extends ExcelComponent {
      * change currentText in store
      */
     changeText(value) {
-        this.$dispatch({type: 'select'});
         const {row, col} = this.selection.current.id();
         const id = `${row}:${col}`;
         this.$dispatch(Actions.changeText({
@@ -147,12 +166,12 @@ export class Table extends ExcelComponent {
             }
         }
     }
+
     /**
      * @param {Event} event
      * emit text to formula
      */
     onInput(event) {
-        // this.$emit('table:input', $(event.target));
         this.changeText($(event.target).text());
     }
 }
