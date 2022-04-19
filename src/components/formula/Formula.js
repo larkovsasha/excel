@@ -11,29 +11,41 @@ export class Formula extends ExcelComponent {
         super($root, {
             name: 'Formula',
             listeners: ['input', 'keydown'],
+            subscribe: ['currentText'],
             ...options,
         });
     }
+
     /**
      * @return {string} return className
      */
     static get className() {
         return 'excel__formula';
     }
+
     /**
      * init DomListeners and Selectors
      */
     init() {
         super.init();
-        this.$input = this.$root.find('#formula-input');
+        this.$formula = this.$root.find('#formula-input');
         this.$on('table:cellSelect', $cell => {
-            this.$input.text($cell.text());
+            this.$formula.text($cell.text());
         });
         this.$on('table:input', $cell => {
-            console.log($cell);
-            this.$input.text($cell.text());
+            this.$formula.text($cell.text());
         });
+        // this.$subscribe(state =>{
+        //     this.$formula.text(state.currentText);
+        //     console.log(state, 'formula');
+        // });
     }
+
+    // eslint-disable-next-line require-jsdoc
+    storeChanged({currentText}) {
+        this.$formula.text(currentText);
+    }
+
     /**
      * @return {string} return html string
      */

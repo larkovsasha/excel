@@ -24,7 +24,7 @@ export class Emitter {
      * subscribe to event
      * @param {string} event
      * @param {Function} fn
-     * @return {Function}
+     * @return {Function} unsubscribe function
      */
     subscribe(event, fn) {
         this.listeners[event] = this.listeners[event] || [];

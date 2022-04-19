@@ -12,8 +12,11 @@ export class ExcelComponent extends DomListener {
         super($root, options.listeners);
         this.name = options.name || '';
         this.emitter = options.emitter;
+        this.subscribe = options.subscribe || [];
+        this.store = options.store;
         this.prepare();
         this.unsubscribers = [];
+        this.storeSub = null;
     }
     /**
      * method for logic to be executed after getting an instance of class
@@ -44,11 +47,43 @@ export class ExcelComponent extends DomListener {
         const unsub = this.emitter.subscribe(event, fn);
         this.unsubscribers.push(unsub);
     }
+
+    /**
+     * @param{Object}action
+     * dispatch action from component
+     */
+    $dispatch(action) {
+        this.store.dispatch(action);
+    }
+    // /**
+    //  * @param{Function}fn
+    //  * subscribe to event
+    //  */
+    // $subscribe(fn) {
+    //     this.storeSub = this.store.subscribe(fn);
+    // }
+
+    /**
+     * @param{Object}changes
+     *
+     */
+    storeChanged(changes) {
+    }
+
+    /**
+     * checks if the component follows the state field
+     * @param{String}key
+     * @return {boolean}
+     */
+    isWatching(key) {
+        return this.subscribe.includes(key);
+    }
     /**
      * remove event listeners
      */
     destroy() {
         this.removeDOMListeners();
         this.unsubscribers.forEach(unsub => unsub());
+        this.storeSub.unsubscribe();
     }
 }

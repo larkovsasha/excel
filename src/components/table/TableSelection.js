@@ -1,5 +1,5 @@
-const selectedClassName = 'selected';
-const groupSelectedClassName = 'selected-background';
+const SELECTED_CLASSNAME = 'selected';
+const GROUP_SELECTED_CLASSNAME = 'selected-background';
 /**
  * class for cell selection
  */
@@ -8,6 +8,7 @@ export class TableSelection {
     constructor() {
         this.group = [];
         this.current = null;
+        this.groupEdgeCell = null;
     }
     /**
      * @param {Dom} $el dom selector
@@ -18,15 +19,15 @@ export class TableSelection {
         this.group = [];
         this.current = $el;
         this.group.push($el);
-        $el.addClass(selectedClassName);
+        $el.addClass(SELECTED_CLASSNAME);
     }
     /**
      * clear selected cells
      */
     clear() {
         this.group.forEach($cell => {
-            $cell.removeClass(selectedClassName);
-            $cell.removeClass(groupSelectedClassName);
+            $cell.removeClass(SELECTED_CLASSNAME);
+            $cell.removeClass(GROUP_SELECTED_CLASSNAME);
             $cell.css({boxShadow: ''});
         });
         this.group = [];
@@ -34,21 +35,32 @@ export class TableSelection {
     /**
      * @param{Dom[]}$group
      * @param{Object}coordinates coordinates of cells group
+     * @param{Dom}groupEdgeCell the cell in which the cursor is
+     * located when scaling the selected area
      * set cells group
      */
-    selectGroup($group = [], coordinates) {
+    selectGroup($group = [], coordinates, groupEdgeCell) {
+        this.groupEdgeCell = groupEdgeCell;
         this.groupCoords = coordinates;
         this.clear();
-        this.current.addClass(selectedClassName).focus();
+        this.current.addClass(SELECTED_CLASSNAME).focus();
         this.group = $group;
 
-        this.group.forEach($el => this.applyCellsStyles($el));
+        this.group.forEach($el => this.applySelectedCellsStyles($el));
     }
+
+    /**
+     * @return{Array} ids array
+     */
+    get selectedIds() {
+        return this.group.map($el => $el.id());
+    }
+
     /**
      * @param{Dom}$cell
-     * set css to cell
+     * set css to selected cell
      */
-    applyCellsStyles($cell) {
+    applySelectedCellsStyles($cell) {
         const {row, col} = $cell.id();
         if (row === this.groupCoords.rowsStart) {
             $cell.updateCss({boxShadow: '0px -2px #1a73e8'});
@@ -62,6 +74,17 @@ export class TableSelection {
         if (col === this.groupCoords.colsEnd) {
             $cell.updateCss({boxShadow: '2px 0 #1a73e8'});
         }
-        $cell.addClass(groupSelectedClassName);
+        $cell.addClass(GROUP_SELECTED_CLASSNAME);
+    }
+
+    /**
+     * @param{Object}style css object
+     * set css to cell
+     */
+    applyStyles(style) {
+        this.current.css(style);
+        this.group.forEach(cell => {
+            cell.css(style);
+        });
     }
 }

@@ -13,15 +13,14 @@
   user-select: none;
   & i{
     font-size: 20px;
+  }
+  &:active, &.active{
+    color: $color;
+  }
 
-    &:active, &.active{
-      color: $color;
-    }
-
-    &:hover{
-      cursor: pointer;
-      background: #eee;
-    }
+  &:hover{
+    cursor: pointer;
+    background: #eee;
   }
 }
 

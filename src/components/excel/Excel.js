@@ -1,5 +1,6 @@
 import {$} from "@core/dom";
 import {Emitter} from "@core/Emitter";
+import {StoreSubscriber} from "@core/storeSubscriber";
 
 /**
  * main class in app which includes other components
@@ -17,6 +18,8 @@ export class Excel {
         this.$el = $(selector);
         this.components = options.components || [];
         this.emmiter = new Emitter();
+        this.store = options.store;
+        this.subscriber = new StoreSubscriber(this.store);
     }
     /**
      * create root element and append components instances
@@ -27,6 +30,7 @@ export class Excel {
 
         const componentOptions = {
             emitter: this.emmiter,
+            store: this.store,
         };
         this.components = this.components.map(Component => {
             const $el = $.create('div', Component.className);
@@ -42,12 +46,15 @@ export class Excel {
      */
     render() {
         this.$el.append(this.getRoot());
+
+        this.subscriber.subscribeComponents(this.components);
         this.components.forEach(component => component.init());
     }
     /**
      * destroy all components
      */
     destroy() {
+        this.subscriber.unsubscribeComponents();
         this.components.forEach(comp => comp.destroy());
     }
 }
