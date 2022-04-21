@@ -9,7 +9,18 @@ export const defaultState = {
     stylesState: {},
     currentText: '',
     title: defaultTitle,
+    openedDate: new Date().toJSON(),
 };
-export const initialState = storage('excel-state') ?
-    storage('excel-state') :
-    defaultState;
+
+
+/**
+ * return initial state
+ * @param {string} key
+ * @return {Object}
+ */
+export function getInitialState(key) {
+    console.log(key);
+    return storage(key) ?
+        storage(key) :
+        JSON.parse(JSON.stringify(defaultState));
+}

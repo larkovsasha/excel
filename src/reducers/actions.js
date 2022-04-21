@@ -1,6 +1,6 @@
 import {
     APPLY_STYLES, CHANGE_STYLES, CHANGE_TEXT, CHANGE_TITLE,
-    COL_RESIZE, ROW_RESIZE,
+    COL_RESIZE, ROW_RESIZE, UPDATE_DATE,
 } from "@/reducers/types";
 
 export const Actions = {
@@ -42,6 +42,11 @@ export const Actions = {
         return {
             type: CHANGE_TITLE,
             data,
+        };
+    },
+    updateDate(data) {
+        return {
+            type: UPDATE_DATE,
         };
     },
 };

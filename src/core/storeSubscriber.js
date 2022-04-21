@@ -11,7 +11,7 @@ export class StoreSubscriber {
      */
     constructor(store) {
         this.store = store;
-        this.sub = null;
+        this.unsub = null;
         this.prevState = {};
     }
 
@@ -21,14 +21,13 @@ export class StoreSubscriber {
      */
     subscribeComponents(components) {
         this.prevState = this.store.getState();
-        this.sub = this.store.subscribe(state => {
+        this.unsub = this.store.subscribe(state => {
             Object.keys(state).forEach(key => {
-                // if (key === 'cu')
                 if (!isEqual(state[key], this.prevState[key])) {
-                    components.forEach(c => {
-                        if (c.isWatching(key)) {
+                    components.forEach(component => {
+                        if (component.isWatching(key)) {
                             const changes = {[key]: state[key]};
-                            c.storeChanged(changes);
+                            component.storeChanged(changes);
                         }
                     });
                 }
@@ -41,6 +40,6 @@ export class StoreSubscriber {
      * unsubscribe components from store
      */
     unsubscribeComponents() {
-
+        this.unsub.unsubscribe();
     }
 }
