@@ -16,7 +16,6 @@ export class ExcelComponent extends DomListener {
         this.store = options.store;
         this.prepare();
         this.unsubscribers = [];
-        this.storeSub = null;
     }
     /**
      * method for logic to be executed after getting an instance of class
@@ -55,13 +54,6 @@ export class ExcelComponent extends DomListener {
     $dispatch(action) {
         this.store.dispatch(action);
     }
-    // /**
-    //  * @param{Function}fn
-    //  * subscribe to event
-    //  */
-    // $subscribe(fn) {
-    //     this.storeSub = this.store.subscribe(fn);
-    // }
 
     /**
      * @param{Object}changes
@@ -84,6 +76,5 @@ export class ExcelComponent extends DomListener {
     destroy() {
         this.removeDOMListeners();
         this.unsubscribers.forEach(unsub => unsub());
-        this.storeSub.unsubscribe();
     }
 }

@@ -63,7 +63,6 @@ export class Table extends ExcelComponent {
 
         this.$on('toolbar:ApplyStyles', value => {
             this.selection.applyStyles(value);
-            console.log(value);
             this.$dispatch(Actions.applyStyles({
                 value,
                 ids: this.selection.selectedIds,
@@ -98,10 +97,6 @@ export class Table extends ExcelComponent {
 
             const styles = $cell.getStyles(Object.keys(defaultFormulaStyles ));
             this.$dispatch(Actions.changeCurrentCellStyles(styles));
-            // this.selectCell($cell);
-            // !!!!
-            // this.$dispatch({type: 'select'});
-            // this.$emit('table:cellSelect', $cell);
             selectCellsHandler(this.$root, event, this.selection);
         }
     }

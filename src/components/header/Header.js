@@ -2,6 +2,7 @@ import {ExcelComponent} from "@core/ExcelComponent";
 import {$} from "@core/dom";
 import {Actions} from "@/reducers/actions";
 import {defaultTitle} from "@/constants";
+import {ActiveRoute} from "@core/routes/ActiveRoute";
 
 // eslint-disable-next-line require-jsdoc
 export class Header extends ExcelComponent {
@@ -18,7 +19,7 @@ export class Header extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Header',
-            listeners: ['input'],
+            listeners: ['input', 'click'],
             ...options,
         });
     }
@@ -32,12 +33,12 @@ export class Header extends ExcelComponent {
         <input type="text" class="input" value="${title}">
 
         <div class="btns-box">
-            <div class="btn">
-                <i class="material-icons">delete</i>
+            <div class="btn" data-button="remove">
+                <i class="material-icons" data-button="remove">delete</i>
             </div>
 
-            <div class="btn">
-                <i class="material-icons">exit_to_app</i>
+            <div class="btn" data-button="exit">
+                <i class="material-icons" data-button="exit">exit_to_app</i>
             </div>
         </div>
         `;
@@ -46,5 +47,15 @@ export class Header extends ExcelComponent {
     onInput(event) {
         const $target = $(event.target);
         this.$dispatch(Actions.changeTitle($target.text()));
+    }
+    // eslint-disable-next-line
+    onClick(event) {
+        const $target = $(event.target);
+        if ($target.dataSet.button === 'remove') {
+            localStorage.removeItem(`excel:${ActiveRoute.param}`);
+            ActiveRoute.navigate('#');
+        } else if ($target.dataSet.button=== 'exit') {
+            ActiveRoute.navigate('#');
+        }
     }
 }

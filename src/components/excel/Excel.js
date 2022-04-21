@@ -1,6 +1,7 @@
 import {$} from "@core/dom";
 import {Emitter} from "@core/Emitter";
 import {StoreSubscriber} from "@core/storeSubscriber";
+import {Actions} from "@/reducers/actions";
 
 /**
  * main class in app which includes other components
@@ -8,14 +9,12 @@ import {StoreSubscriber} from "@core/storeSubscriber";
  */
 export class Excel {
     /**
-     * @param {string} selector dom selector
      * @param {Object} options options set.
      * options{
      *     components: [] // components to render
      * }
      */
-    constructor(selector, options) {
-        this.$el = $(selector);
+    constructor( options) {
         this.components = options.components || [];
         this.emmiter = new Emitter();
         this.store = options.store;
@@ -23,7 +22,7 @@ export class Excel {
     }
     /**
      * create root element and append components instances
-     * @return {Dom} return root
+     * @return {Dom | string} return root
      */
     getRoot() {
         const $root = $.create('div', 'excel');
@@ -39,14 +38,13 @@ export class Excel {
             $root.append($el);
             return component;
         });
-        return $root;
+        return $root.$el;
     }
     /**
-     * render root element
+     * init all components
      */
-    render() {
-        this.$el.append(this.getRoot());
-
+    init() {
+        this.store.dispatch(Actions.updateDate());
         this.subscriber.subscribeComponents(this.components);
         this.components.forEach(component => component.init());
     }
