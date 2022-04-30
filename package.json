@@ -50,5 +50,10 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4",
     "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "material-design-icons": "^3.0.1",
+    "normalize.css": "^8.0.1"
   }
 }

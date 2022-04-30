@@ -58,7 +58,7 @@ export class TableSelection {
 
     /**
      * @param{Dom}$cell
-     * set css to selected cell
+     * set selected css to selected cell
      */
     applySelectedCellsStyles($cell) {
         const {row, col} = $cell.id();
